@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { connect, useSelector } from "react-redux";
-import { listCategory ,getInfoCategory} from "../../store/actions/index";
+import { listCategory, getInfoCategory } from "../../store/actions/index";
 import { Link } from "react-router-dom";
+import Modal from "../../components/Modal";
+import ContentModal from "./ModalCategory";
 
-const ListCategory = ({ listCategory ,getInfoCategory}) => {
+const ListCategory = ({ listCategory, getInfoCategory }) => {
   const CategoryUserStore = useSelector((res) => res.user);
 
+  const [state, setState] = useState({
+    visible: false,
+    resultCategory: {},
+  });
   useEffect(async () => {
     const getListCategory = await listCategory(
       "http://localhost:3000/store",
@@ -13,9 +19,13 @@ const ListCategory = ({ listCategory ,getInfoCategory}) => {
     );
     console.log(getListCategory);
   }, []);
-  const getDetailCategory = (user) => {
-    return async () => {
-      await getInfoCategory(user);
+  const toggleModal = (user) => {
+    return () => {
+      setState((prev) => ({
+        ...prev,
+        resultCategory: user || {},
+        visible: !prev.visible,
+      }));
     };
   };
 
@@ -44,21 +54,30 @@ const ListCategory = ({ listCategory ,getInfoCategory}) => {
                 {item?.id}
               </th>
               <th border="1px solid #dddddd" text-align="left" padding="8px">
-              <Link to={{ pathname: "/detailcategory" }}>
-                  <span onClick={getDetailCategory(item)}>{item?.name}</span>
-                </Link>
+              <span style={{ cursor: "pointer" }} onClick={toggleModal(item)}>
+                  {item?.name}
+                </span>
               </th>
               <th border="1px solid #dddddd" text-align="left" padding="8px">
                 {item?.isActive ? "True" : "False"}
               </th>
             </tr>
           ))}
-          
         </tbody>
       </table>
+      <Modal
+        visible={state.visible}
+        children={
+          <ContentModal
+          resultCategory={state.resultCategory}
+            toggleModal={toggleModal}
+          />
+        }
+      />
     </div>
   );
 };
 export default connect(null, {
-  listCategory,getInfoCategory,
+  listCategory,
+  getInfoCategory,
 })(ListCategory);

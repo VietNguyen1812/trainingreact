@@ -18,7 +18,7 @@ const Modal = (props) => {
     setState((prev) => ({ ...prev, rootElement: element }));
   }, []);
 
-  const renderModal = visible ? (
+  const renderModal =visible? (
     <div
       ref={containerRef}
       style={{
@@ -57,10 +57,8 @@ const Modal = (props) => {
         </div>
       </div>
     </div>
-  ) : null;
-
-  console.log(visible);
-
+  ):null;
+  
   return (
     state.rootElement &&
     ReactDOM.createPortal(<>{renderModal}</>, state.rootElement)

@@ -6,9 +6,9 @@ import ContentModal from "./ModalUser";
 
 const ListUser = ({ listUser, getInfoUser }) => {
   const UserReduxStore = useSelector((state) => state.user);
-  
+
   const [state, setState] = useState({
-    visible: "false",
+    visible: false,
     currentUser: {},
   });
 

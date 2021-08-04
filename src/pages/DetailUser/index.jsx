@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { connect, useSelector } from "react-redux";
-import Modal from "../../components/Modal";
+
 
 const DetailUser = () => {
   const userStore = useSelector((state) => state.user);
